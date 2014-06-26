@@ -22,15 +22,13 @@
 		<javac includeantruntime="false" srcdir="src" destdir="bin" classpathref="lib.path"  source="1.6" target="1.6" deprecation="on" optimize="on" debug="on" />
 		
 		<mkdir dir="dist"/>
-        <zip destfile="${sources_zip}" basedir="src" />
-        <zip destfile="${clszip_file}" basedir="bin" />
 		<copy toDir="bin"><fileset file="plugins.config"></fileset></copy> 
 
 		<jar destfile="${jar_file}" basedir="bin" />
 		
 		<copy toDir="${plugins}/BIOP/"><fileset file="dist/${ant.project.name}.jar"></fileset></copy> 
 		<copy toDir="${distributables}"><fileset file="dist/${ant.project.name}.jar"></fileset></copy> 
-		<copy toDir="${sources}"><fileset file="${sources_zip}"></fileset></copy> 
+		<!--<copy toDir="${sources}"><fileset file="${sources_zip}"></fileset></copy> --> 
 		
 	
 	<!--	<mkdir dir="doc"/>
@@ -39,8 +37,9 @@
         </javadoc>
 	-->	
 		<mkdir dir="dist"/>
-		<zip destfile="${sources_zip}" basedir="src" />
-        <zip destfile="${clszip_file}" basedir="bin" />
+	<!-- <zip destfile="${sources_zip}" basedir="src" /> -->
+    <!-- <zip destfile="${clszip_file}" basedir="bin" /> -->
+    
         <jar destfile="${jar_file}" basedir="bin" />
 
 	</target>
