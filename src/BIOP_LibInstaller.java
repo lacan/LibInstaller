@@ -68,17 +68,32 @@ public class BIOP_LibInstaller implements PlugIn {
 			String[] allFun = Interpreter.getAdditionalFunctions().split("\n");
 			
 			for (int i=0;i<allFun.length; i++) {
-				if (allFun[i].startsWith("function")) {
+				if (allFun[i].trim().startsWith("function")) {
 					IJ.log(""+allFun[i].substring(9, allFun[i].indexOf("{")).trim());
 					
 					// Now go back and grab everything that starts with //
 					String comments = "";
-					for (int j=i-1; j>maxReturns(i); j--) {
-						if(allFun[j].startsWith("//")) {
-							comments = "          "+allFun[j].substring(2).trim()+"\n"+ comments;
+					int j=0;
+					if(allFun[i-1].trim().startsWith("*/")) {
+						// Go back till you get a /*
+						j=i-2;
+						
+						int ind = j;
+						while (j>0) {
+							if (allFun[j].trim().startsWith("/*")) {
+								ind = j;
+								j=0;
+							} else {
+								j--;
+							}
 						}
+						
+						for (int k=i-2; k>=ind+1; k--) {
+							comments = "          "+allFun[k].substring(2).trim()+"\n"+ comments;
+						}
+						
+						IJ.log(comments);
 					}
-					IJ.log(comments);
 				}
 			}
 		} else {
