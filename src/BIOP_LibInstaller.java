@@ -9,33 +9,41 @@ import org.apache.commons.io.FileUtils;
 public class BIOP_LibInstaller implements PlugIn {
 	private final int maxreturn = 3;
 	
+	
 	public static void installLibrary(String libPath) {
 		// Get Macros path
-		String homePath = Prefs.getHomeDir();
-//		String libPath = homePath+File.separator+"macros"+File.separator;
 		
-		//IJ.log(libPath+libName);
+		// libPath could be just a filename?
+		
 		File f = new File(libPath);
 		String libName = f.getName().substring(0, f.getName().length()-4);
 
-		if (!f.exists()) {
-			//Need to download from Update Site
-			IJ.showMessage(libName+" not found. in "+libPath+".\n"+ "Make sure you placed "+libName+" in the right place." );
-		} else {
+		if (f.exists()) {
+			
 			try {
 				String libFunctions = FileUtils.readFileToString(f);
 				// Make sure we append the name of the library somewhere
-				libFunctions = "// From file: "+libName+"\n\r"+libFunctions;
+				String IdStart = "// From: "+libName+" START \n\r";
+				String IdEnd = "/n/r// From: "+libName+" END";
+				libFunctions = IdStart+libFunctions+IdEnd;				
 				   String oldFunctions = Interpreter.getAdditionalFunctions();
 				   //IJ.log(oldFunctions);
 				   if (oldFunctions != null) {
-					   if (oldFunctions.indexOf(libName) == -1) {
-						   IJ.log("Existing Library. Appending "+libName+" Library.");
-						   Interpreter.setAdditionalFunctions(oldFunctions+libFunctions);
+					   if (oldFunctions.indexOf(IdStart) == -1) {
+						   IJ.log("There is another existing Library. Appending "+libName+" Library.");
 						   
 					   } else {
-						   IJ.log(libName+" Library already installed.");
+						   IJ.log(libName+" Library already installed. Reloading...");
+						   //cut out the old one
+						   int startInd = oldFunctions.indexOf(IdStart);
+						   int endInd   = oldFunctions.indexOf(IdEnd)+IdEnd.length();
+						   
+						   oldFunctions = oldFunctions.substring(startInd, startInd)+oldFunctions.substring(endInd, oldFunctions.length());
+						   //IJ.log(oldFunctions);
 					   }
+
+					   Interpreter.setAdditionalFunctions(oldFunctions+libFunctions);
+
 				   } else {
 					   IJ.log("Empty Library. Adding "+libName+" Library.");
 
@@ -44,6 +52,9 @@ public class BIOP_LibInstaller implements PlugIn {
 			} catch (Exception e) {
 				IJ.error(e.getMessage());
 			}
+		} else { 
+			// Check that the file has the complete path
+			IJ.showMessage(libName+" not found. in "+libPath+".\n"+ "Make sure you placed "+libName+" in the right place." );
 		}
 	}
 
