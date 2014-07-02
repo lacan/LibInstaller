@@ -12,7 +12,7 @@
 	
 	<!-- External Libraries -->
 	<path id="lib.path">
-		<pathelement path="${lib}/ij-1.49b.jar"/>		
+		<pathelement path="${lib}/ij-1.49c.jar"/>		
 	</path>
 
 		

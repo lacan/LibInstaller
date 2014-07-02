@@ -3,13 +3,30 @@ import ij.io.OpenDialog;
 import ij.macro.Interpreter;
 import ij.plugin.*;
 import java.io.*;
-
-import org.apache.commons.io.FileUtils;
+import java.util.Scanner;
 
 public class BIOP_LibInstaller implements PlugIn {
 	private final int maxreturn = 3;
 	
 	
+	public void run(String what) {
+		if (what.equals("Show Functions")) {
+
+			showAvaialableFunctions();
+
+		} else {
+				
+				OpenDialog od= new OpenDialog("Choose the file with your macros");
+				String fileName = od.getFileName();
+				String fileDir = od.getDirectory();
+				what = fileDir+fileName;
+				installLibrary(what);
+
+		}
+			
+		
+	}
+
 	public static void installLibrary(String libPath) {
 		// Get Macros path
 		
@@ -21,7 +38,9 @@ public class BIOP_LibInstaller implements PlugIn {
 		if (f.exists()) {
 			
 			try {
-				String libFunctions = FileUtils.readFileToString(f);
+				Scanner sc = new Scanner(f);
+				 String libFunctions = sc.useDelimiter("\\Z").next();
+				 sc.close();
 				// Make sure we append the name of the library somewhere
 				String IdStart = "// From: "+libName+" START \n\r";
 				String IdEnd = "/n/r// From: "+libName+" END";
@@ -51,61 +70,49 @@ public class BIOP_LibInstaller implements PlugIn {
 				   }
 			} catch (Exception e) {
 				IJ.error(e.getMessage());
-			}
+			} 
 		} else { 
 			// Check that the file has the complete path
 			IJ.showMessage(libName+" not found. in "+libPath+".\n"+ "Make sure you placed "+libName+" in the right place." );
 		}
+		
 	}
-
-	private int maxReturns(int ind) {
-		return ( (ind-maxreturn-1) > 0 ) ? ind-maxreturn-1 : 0;
-	}
-	public void run(String what) {
-		if (what.equals("Show Functions")) {
-			IJ.log("Displaying all available functions from the macro interpreter.");
-			// Display all functions available by parsing the string from Interpreter.
-			String[] allFun = Interpreter.getAdditionalFunctions().split("\n");
-			
-			for (int i=0;i<allFun.length; i++) {
-				if (allFun[i].trim().startsWith("function")) {
-					IJ.log(""+allFun[i].substring(9, allFun[i].indexOf("{")).trim());
+	
+	public static void showAvaialableFunctions() {
+		
+		IJ.log("Displaying all available functions from the macro interpreter.");
+		// Display all functions available by parsing the string from Interpreter.
+		String[] allFun = Interpreter.getAdditionalFunctions().split("\n");
+		
+		for (int i=0;i<allFun.length; i++) {
+			if (allFun[i].trim().startsWith("function")) {
+				IJ.log(""+allFun[i].substring(9, allFun[i].indexOf("{")).trim());
+				
+				// Now go back and grab everything that starts with */
+				String comments = "";
+				int j=0;
+				if(allFun[i-1].trim().startsWith("*/")) {
+					// Go back till you get a /*
+					j=i-2;
 					
-					// Now go back and grab everything that starts with //
-					String comments = "";
-					int j=0;
-					if(allFun[i-1].trim().startsWith("*/")) {
-						// Go back till you get a /*
-						j=i-2;
-						
-						int ind = j;
-						while (j>0) {
-							if (allFun[j].trim().startsWith("/*")) {
-								ind = j;
-								j=0;
-							} else {
-								j--;
-							}
+					int ind = j;
+					while (j>0) {
+						if (allFun[j].trim().startsWith("/*")) {
+							ind = j;
+							j=0;
+						} else {
+							j--;
 						}
-						
-						for (int k=i-2; k>=ind+1; k--) {
-							comments = "          "+allFun[k].substring(2).trim()+"\n"+ comments;
-						}
-						
-						IJ.log(comments);
 					}
+					
+					for (int k=i-2; k>=ind+1; k--) {
+						comments = "        "+allFun[k].substring(2).trim()+"\n"+ comments +"\n";
+					}
+					
+					IJ.log(comments);
 				}
 			}
-		} else {
-				
-				OpenDialog od= new OpenDialog("Choose the file with your macros");
-				String fileName = od.getFileName();
-				String fileDir = od.getDirectory();
-				what = fileDir+fileName;
-				installLibrary(what);
-
 		}
-			
 		
 	}
 
