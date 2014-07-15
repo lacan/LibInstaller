@@ -35,6 +35,13 @@ public class BIOP_LibInstaller implements PlugIn {
 		String fullPath = f.getAbsolutePath();
 		String libName = f.getName().substring(0, f.getName().length()-4);
 		
+		if (!f.isAbsolute()) {
+			// Make path absolute by appending the Fiji/ImageJ root to it.
+			String fijiPath = Menus.getPlugInsPath();
+			libPath = fijiPath+libPath;
+			f = new File(libPath);
+		}
+			
 		IJ.log("Full path to "+libName+" :"+fullPath);
 
 		if (f.exists()) {
