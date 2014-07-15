@@ -6,8 +6,7 @@ import java.io.*;
 import java.util.Scanner;
 
 public class BIOP_LibInstaller implements PlugIn {
-	private final int maxreturn = 3;
-	
+
 	
 	public void run(String what) {
 		if (what.equals("Show Functions")) {
@@ -33,7 +32,10 @@ public class BIOP_LibInstaller implements PlugIn {
 		// libPath could be just a filename?
 		
 		File f = new File(libPath);
+		String fullPath = f.getAbsolutePath();
 		String libName = f.getName().substring(0, f.getName().length()-4);
+		
+		IJ.log("Full path to "+libName+" :"+fullPath);
 
 		if (f.exists()) {
 			
