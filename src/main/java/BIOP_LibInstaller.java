@@ -55,7 +55,7 @@ public class BIOP_LibInstaller implements PlugIn {
 				 sc.close();
 				// Make sure we append the name of the library somewhere
 				String IdStart = "// From: "+libName+" START \n\r";
-				String IdEnd = "/n/r// From: "+libName+" END";
+				String IdEnd = "\n\r// From: "+libName+" END";
 				libFunctions = IdStart+libFunctions+IdEnd;				
 				   String oldFunctions = Interpreter.getAdditionalFunctions();
 				   //IJ.log(oldFunctions);
