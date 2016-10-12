@@ -49,7 +49,7 @@
 		<connection>https://c4science.ch/diffusion/1403/ijp-lib-installer.git</connection>
 		<developerConnection>oburri</developerConnection>
 		<tag>HEAD</tag>
-		<url>https://github.com/lacan/LibInstaller</url>
+		<url>https://c4science.ch/diffusion/1403/</url>
 	</scm>
 
 
