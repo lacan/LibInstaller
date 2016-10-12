@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
 		http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -8,36 +7,49 @@
 	<parent>
 		<groupId>net.imagej</groupId>
 		<artifactId>pom-imagej</artifactId>
-		<version>7.0.0</version>
+		<version>16.5.0</version>
 		<relativePath />
 	</parent>
 
 	<groupId>ch.epfl.biop</groupId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 
-	<name>plugins/BIOP_LibInstaller.jar</name>
+	<name>plugins/BIOP/BIOP_LibInstaller.jar</name>
 
 	<developers>
 		<developer>
-			<id>dscho</id>
-			<name>Johannes Schindelin</name>
-			<email>johannes.schindelin@gmx.de</email>
-			<url>http://loci.wisc.edu/people/johannes-schindelin</url>
-			<organization>UW-Madison LOCI</organization>
-			<organizationUrl>http://loci.wisc.edu/</organizationUrl>
+			<id>oburri</id>
+			<name>Olivier Burri</name>
+			<email>olivier.burri@gmail.com</email>
+			<url>http://biop.epfl.ch/INFO_Facility.html</url>
+			<organization>Ecole Polytechnique Fédérale de Lausanne</organization>
+			<organizationUrl>http://epfl.ch</organizationUrl>
 			<roles>
-				<role>architect</role>
-				<role>developer</role>
+				<role>Image Analyst</role>
+				<role>Life Sciences Engineer</role>
 			</roles>
-			<timezone>-6</timezone>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>guiet</id>
+			<name>Romain Guiet</name>
+			<email>romain.guiet@epfl.ch</email>
+			<url>http://biop.epfl.ch/INFO_Facility.html</url>
+			<organization>Ecole Polytechnique Fédérale de Lausanne</organization>
+			<organizationUrl>http://epfl.ch</organizationUrl>
+			<roles>
+				<role>Image Analyst</role>
+				<role>Dr. in Biology</role>
+			</roles>
+			<timezone>+1</timezone>
 		</developer>
 	</developers>
 
 	<scm>
-		<connection>scm:git:git:oburri@git.epfl.ch/repo/biop-lib-installer</connection>
-		<developerConnection>scm:git:oburri@git.epfl.ch/repo/biop-lib-installer</developerConnection>
+		<connection>https://c4science.ch/diffusion/1403/ijp-lib-installer.git</connection>
+		<developerConnection>oburri</developerConnection>
 		<tag>HEAD</tag>
-		<url>http://biop.epfl.ch</url>
+		<url>https://github.com/lacan/LibInstaller</url>
 	</scm>
 
 
@@ -64,5 +76,13 @@
 	</build>
 
 	<artifactId>BIOP_LibInstaller</artifactId>
-	<description>Installer for custom macro libraries</description>
+	<description>Installer for custom macro libraries. 
+
+This module allows you to define a text file containing ImageJ 1.0 Macro Language Functions to be loaded. 
+
+Once loaded, these are available to the macro interpreter and can be called from any macro. </description>
+	<properties>
+		<main-class>BIOP_LibInstaller</main-class>
+		<imagej.app.directory>C:/Fiji/</imagej.app.directory>
+	</properties>
 </project>
