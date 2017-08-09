@@ -1,9 +1,13 @@
-import ij.*;
+import ij.IJ;
+import ij.Menus;
 import ij.io.OpenDialog;
 import ij.macro.Interpreter;
-import ij.plugin.*;
-import java.io.*;
+import ij.plugin.PlugIn;
+import ij.plugin.frame.Editor;
+
+import java.io.File;
 import java.util.Scanner;
+
 
 public class BIOP_LibInstaller implements PlugIn {
 
@@ -36,7 +40,7 @@ public class BIOP_LibInstaller implements PlugIn {
 		String libName = f.getName().substring(0, f.getName().length()-4);
 		
 		if (!f.isAbsolute()) {
-			IJ.log("Relative Path, adding Path to Fiji");
+			//IJ.log("Relative Path, adding Path to Fiji");
 			// Make path absolute by appending the Fiji/ImageJ root to it.
 			String fijiPath = Menus.getPlugInsPath();
 			libPath = fijiPath+libPath;
@@ -45,7 +49,7 @@ public class BIOP_LibInstaller implements PlugIn {
 
 		}
 			
-		IJ.log("Full path to "+libName+" :"+fullPath);
+		//IJ.log("Full path to "+libName+" :"+fullPath);
 
 		if (f.exists()) {
 			
@@ -61,10 +65,10 @@ public class BIOP_LibInstaller implements PlugIn {
 				   //IJ.log(oldFunctions);
 				   if (oldFunctions != null) {
 					   if (oldFunctions.indexOf(IdStart) == -1) {
-						   IJ.log("There is another existing Library. Appending "+libName+" Library.");
+						  //IJ.log("There is another existing Library. Appending "+libName+" Library.");
 						   
 					   } else {
-						   IJ.log(libName+" Library already installed. Reloading...");
+						   //IJ.log(libName+" Library already installed. Reloading...");
 						   //cut out the old one
 						   int startInd = oldFunctions.indexOf(IdStart);
 						   int endInd   = oldFunctions.indexOf(IdEnd)+IdEnd.length();
@@ -76,7 +80,7 @@ public class BIOP_LibInstaller implements PlugIn {
 					   Interpreter.setAdditionalFunctions(oldFunctions+libFunctions);
 
 				   } else {
-					   IJ.log("Empty Library. Adding "+libName+" Library.");
+					   //IJ.log("Empty Library. Adding "+libName+" Library.");
 
 					   Interpreter.setAdditionalFunctions(libFunctions);
 				   }
@@ -90,18 +94,18 @@ public class BIOP_LibInstaller implements PlugIn {
 		
 	}
 	
-	public static void showAvaialableFunctions() {
+	public static void showAvaialableFunctions() throws NullPointerException {
 		
-		IJ.log("Displaying all available functions from the macro interpreter.");
+		String str = "Displaying all available functions from the macro interpreter.\n";
 		// Display all functions available by parsing the string from Interpreter.
 		String[] allFun = Interpreter.getAdditionalFunctions().split("\n");
 		
 		for (int i=0;i<allFun.length; i++) {
 			if (allFun[i].trim().startsWith("// From:")) {
-				IJ.log("---------- From "+allFun[i].trim().substring(8,allFun[i].trim().indexOf("START")).trim()+" Library ----------");
+				str += "---------- From "+allFun[i].trim().substring(8,allFun[i].trim().indexOf("START")).trim()+" Library ----------\n\n";
 			}
 			if (allFun[i].trim().startsWith("function")) {
-				IJ.log(""+allFun[i].substring(9, allFun[i].indexOf("{")).trim());
+				str += ""+allFun[i].substring(9, allFun[i].indexOf("{")).trim()+"\n";
 				
 				// Now go back and grab everything that starts with */
 				String comments = "";
@@ -121,13 +125,19 @@ public class BIOP_LibInstaller implements PlugIn {
 					}
 					
 					for (int k=i-2; k>=ind+1; k--) {
-						comments = "        "+allFun[k].substring(2).trim()+"\n"+ comments +"\r";
+						comments = "        "+allFun[k].substring(2).trim()+"\n"+ comments +"\r\n";
 					}
 					
-					IJ.log(comments);
+					str += comments;
 				}
 			}
 		}
+		Editor ed = Editor.getInstance();
+		if (ed == null) {
+			ed = new Editor();
+		}
+		
+		ed.display("Available Macro Functions", str);
 		
 	}
 
